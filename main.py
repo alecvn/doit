@@ -2,31 +2,44 @@ import asyncio
 import aiocron
 from aiocron import crontab
 
-from discord_bot import bot, send_msg, CHANNEL_ID, TOKEN
+from discord_bot import bot as d_bot, send_msg as discord_send_msg, CHANNEL_ID, TOKEN
+from slack_webhook import send_msg as slack_send_msg
 
-# from slack_webhook import *
+from templates.guitar import (
+    EXERCISES as GUITAR_EXERCISES,
+    SCHEDULE as GUITAR_SCHEDULE,
+    MSG as GUITAR_MSG,
+)
+
+from templates.gym import (
+    EXERCISES as GYM_EXERCISES,
+    SCHEDULE as GYM_SCHEDULE,
+    MSG as GYM_MSG,
+)
 
 
-# @aiocron.crontab("* * * * *")
 async def sendMessage(msg):
-    await send_msg(msg, bot.get_channel(CHANNEL_ID))
+    await discord_send_msg(msg, d_bot.get_channel(CHANNEL_ID))
+    slack_send_msg(msg)
 
 
-# for file in templates:
-# import EXERCISES, SCHEDULE
-crontab("* * * * *", func=lambda: sendMessage("Do eet"), start=True)
-crontab("* * * * *", func=lambda: sendMessage("Do two"), start=True)
+crontab(" ".join(GUITAR_SCHEDULE), func=lambda: sendMessage(GUITAR_MSG), start=True)
+crontab(" ".join(GYM_SCHEDULE), func=lambda: sendMessage(GYM_MSG), start=True)
 
 
 async def wake_time():
     await asyncio.sleep(10)
 
 
-if __name__ == "__main__":
+def main():
     loop = asyncio.get_event_loop()
-    loop.create_task(bot.start(TOKEN))
-    print("bot joined")
-    loop.run_until_complete(wake_time())
-    print("bot awake")
 
+    loop.create_task(d_bot.start(TOKEN))
+    print("Bot joined")
+    loop.run_until_complete(wake_time())
+    print("Bot awake")
     loop.run_forever()
+
+
+if __name__ == "__main__":
+    main()

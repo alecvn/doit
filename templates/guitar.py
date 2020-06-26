@@ -2,7 +2,8 @@ from rng import rng
 
 from template import Exercise, Schedule
 
-SCHEDULE = Schedule("0", "10-18/2", "*", "*", "*")
+# SCHEDULE = Schedule("0", "10-18/2", "*", "*", "*")
+SCHEDULE = Schedule("*", "*", "*", "*", "*")
 
 notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 scales = [
@@ -41,7 +42,14 @@ guitar_right_hand = [
         "https://media.giphy.com/media/Kjj5yTgDdiuvC/giphy.gif",
     ),
 ]
-drums = []
-piano = []
-vocal = []
-EXERCISES = {"guitar": guitar, "drums": drums, "piano": piano, "vocal": vocal}
+EXERCISES = {
+    "guitar_left_hand": guitar_left_hand,
+    "guitar_right_hand": guitar_right_hand,
+}
+
+
+lh = rng.choice(EXERCISES["guitar_left_hand"])
+rh = rng.choice(EXERCISES["guitar_right_hand"])
+lh_msg = f"{lh.name} - {lh.description}"
+rh_msg = f"{rh.name} - {rh.description}"
+MSG = lh_msg + rh_msg
