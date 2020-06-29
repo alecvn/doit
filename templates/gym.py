@@ -2,8 +2,8 @@ from rng import rng
 
 from template import Exercise, Schedule
 
-# SCHEDULE = Schedule("0", "9-17", "*", "*", "*")
-SCHEDULE = Schedule("*", "*", "*", "*", "*")
+SCHEDULE = Schedule("0", "9-17", "*", "*", "*")
+# SCHEDULE = Schedule("*", "*", "*", "*", "*")
 EXERCISES = {
     "upper": [
         Exercise(
@@ -13,13 +13,13 @@ EXERCISES = {
         ),
         Exercise(
             "Burpees",
-            "20 reps",
+            "10 reps",
             "https://media.giphy.com/media/23hPPMRgPxbNBlPQe3/giphy.gif",
         ),
         Exercise(
-            "Shoulder Taps",
+            "Shoulder Press Ups",
             "20 reps",
-            "https://cdn.shopify.com/s/files/1/2930/0432/files/shoulder_taps_large.gif?v=1540063651",
+            "https://www.youtube.com/watch?v=KcvLM-Q4eFo",
         ),
         Exercise(
             "Inch Worms",
@@ -27,9 +27,7 @@ EXERCISES = {
             "https://media.giphy.com/media/UTXzXAwUHGx8MDEtPS/giphy.gif",
         ),
         Exercise(
-            "Bear Crawls",
-            "30 seconds",
-            "https://media.giphy.com/media/LWBkgGLVvDBJK/giphy.gif",
+            "Decline Push-up", "10 reps", "https://www.youtube.com/watch?v=aq2xZxfrQlM"
         ),
         Exercise(
             "Tricep Dips",
@@ -118,14 +116,17 @@ EXERCISES = {
     ],
 }
 
-upper = rng.choice(EXERCISES["upper"])
-core = rng.choice(EXERCISES["core"])
-legs = rng.choice(EXERCISES["legs"])
-upper_msg = f"{upper.name} - {upper.description}"
-core_msg = f"{core.name} - {core.description}"
-legs_msg = f"{legs.name} - {legs.description}"
+# upper = rng.choice(EXERCISES["upper"])
+# core = rng.choice(EXERCISES["core"])
+# legs = rng.choice(EXERCISES["legs"])
+# upper_msg = f"{upper.name} - {upper.description}"
+# core_msg = f"{core.name} - {core.description}"
+# legs_msg = f"{legs.name} - {legs.description}"
 
-MSG = upper_msg + core_msg + legs_msg
+# MSG = upper_msg + core_msg + legs_msg
+MSG = list(
+    zip(EXERCISES.keys(), map(lambda x: rng.choice(EXERCISES[x]), EXERCISES.keys()))
+)
 
 
 # def get_message(exercise):

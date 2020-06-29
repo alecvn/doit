@@ -23,7 +23,7 @@ async def sendMessage(msg):
     slack_send_msg(msg)
 
 
-crontab(" ".join(GUITAR_SCHEDULE), func=lambda: sendMessage(GUITAR_MSG), start=True)
+# crontab(" ".join(GUITAR_SCHEDULE), func=lambda: sendMessage(GUITAR_MSG), start=True)
 crontab(" ".join(GYM_SCHEDULE), func=lambda: sendMessage(GYM_MSG), start=True)
 
 
