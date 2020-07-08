@@ -1,5 +1,9 @@
 # DoIt
 Compose training programs and reminders
 
-## Guitar resources
+## Architecture
+https://github.com/MagicStack/asyncpg
+
+## Templates
+### Guitar resources
 https://fretgym.com
