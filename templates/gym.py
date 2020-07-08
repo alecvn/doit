@@ -90,7 +90,7 @@ EXERCISES = {
         ),
         Exercise(
             "Planks",
-            "30 seconds",
+            "1 min",
             "https://media.giphy.com/media/xT8qBff8cRRFf7k2u4/giphy.gif",
         ),
         Exercise(
@@ -116,40 +116,6 @@ EXERCISES = {
     ],
 }
 
-# upper = rng.choice(EXERCISES["upper"])
-# core = rng.choice(EXERCISES["core"])
-# legs = rng.choice(EXERCISES["legs"])
-# upper_msg = f"{upper.name} - {upper.description}"
-# core_msg = f"{core.name} - {core.description}"
-# legs_msg = f"{legs.name} - {legs.description}"
-
-# MSG = upper_msg + core_msg + legs_msg
 MSG = list(
     zip(EXERCISES.keys(), map(lambda x: rng.choice(EXERCISES[x]), EXERCISES.keys()))
 )
-
-
-# def get_message(exercise):
-#     if exercise.rep_quantity == "reps":
-#         return f"{exercise.num_reps} {exercise.name}"
-#     else:
-#         return f"{exercise.num_reps} {exercise.rep_quantity} of {exercise.name}"
-
-
-# def get_image_json(title, group, attach_images):
-#     chosen = random.choice(group)
-#     text = get_message(chosen)
-
-#     return {
-#         "type": "image",
-#         "image_url": chosen.image_url,
-#         "alt_text": f"{title}: {text}",
-#         "title": {"type": "plain_text", "text": f"{title}: {text}"},
-#     }
-
-
-# def get_text_json(title, group, attach_images):
-#     chosen = random.choice(group)
-#     text = get_message(chosen)
-
-#     return {"type": "section", "text": {"type": "mrkdwn", "text": text}}

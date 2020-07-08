@@ -2,7 +2,7 @@ import asyncio
 import aiocron
 from aiocron import crontab
 
-from discord_bot import bot as d_bot, send_msg as discord_send_msg, CHANNEL_ID, TOKEN
+from discord_bot import bot as d_bot, send_msgs as discord_send_msgs, CHANNEL_ID, TOKEN
 from slack_webhook import send_msg as slack_send_msg
 
 from templates.guitar import (
@@ -18,13 +18,18 @@ from templates.gym import (
 )
 
 
-async def sendMessage(msg):
-    await discord_send_msg(msg, d_bot.get_channel(CHANNEL_ID))
+async def send_discord_message(msg):
+    await discord_send_msgs(msg, d_bot)
+
+
+async def send_slack_message(msg):
     slack_send_msg(msg)
 
 
-# crontab(" ".join(GUITAR_SCHEDULE), func=lambda: sendMessage(GUITAR_MSG), start=True)
-crontab(" ".join(GYM_SCHEDULE), func=lambda: sendMessage(GYM_MSG), start=True)
+crontab(
+    " ".join(GUITAR_SCHEDULE), func=lambda: send_discord_message(GUITAR_MSG), start=True
+)
+crontab(" ".join(GYM_SCHEDULE), func=lambda: slack_send_msg(GYM_MSG), start=True)
 
 
 async def wake_time():

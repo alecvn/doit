@@ -5,20 +5,13 @@ import pytz
 import json
 from dotenv import load_dotenv
 
+from lib import get_thumbnail
+
+
 load_dotenv(verbose=True)
 WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
 CHANNEL_NAME = os.getenv("SLACK_CHANNEL_NAME")
 USERNAME = os.getenv("SLACK_USERNAME")
-
-
-def get_thumbnail(media_url):
-    if media_url[-4:] == ".gif":
-        return media_url
-    elif "youtube" in media_url:
-        youtube_id = media_url.split("watch?v=")[1]
-        return f"https://img.youtube.com/vi/{youtube_id}/1.jpg"
-    else:
-        raise "UnsupportedUrl: Url is not a Gif nor a Youtube video"
 
 
 def get_text(group, name, description, image_url=""):
@@ -106,15 +99,13 @@ def send_msg(msgs):
     end_hour = 17
     current_hour = now.hour
     attach_images = current_hour == start_hour
-    inspirational_hours = [10, 13, 16]
+    inspirational_hours = []  # inspirational_hours = [10, 13, 16]
     inspirational_image_url = (
         get_inspirational_url() if current_hour in inspirational_hours else ""
     )
 
     blocks = get_blocks(
-        msgs,
-        inspirational_image_url=inspirational_image_url,
-        show_media=current_hour == start_hour,
+        msgs, inspirational_image_url=inspirational_image_url, show_media=True
     )
 
     # header = f"*<{inspirational_image_url}|Some text>*"
