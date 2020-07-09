@@ -5,9 +5,12 @@ services:
     build:
       context: ./services/web
       dockerfile: Dockerfile.prod
-    command: gunicorn --bind 0.0.0.0:5000 manage:app
+    command: gunicorn doit_app:doit --bind 0.0.0.0:8080 --worker-class aiohttp.GunicornWebWorker
+    # command: gunicorn --bind 0.0.0.0:5000 manage:app
     expose:
-      - 5000
+      - 8080
+    # ports:
+    #   - 80:8080
     env_file:
       - ./.env.prod
     depends_on:
