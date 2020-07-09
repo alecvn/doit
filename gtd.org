@@ -1,0 +1,31 @@
+
+* dev
+** sprint 0
+*** TODO send all templates in template directory to each configured channel
+*** TODO add upper body exercises
+    https://topfitnesstutorials.com/top-10-upper-body-exercices-no-equipment/
+
+** sprint 1
+*** TODO setup docker for prod
+*** TODO distinguish between dev and prod mode
+    so that it sends message to the test channels and cron is every minute etc
+*** TODO allow users to configure their own templates with bot commands
+    do validation checks on the crontabs being sent through
+    - can't be more than X times an hour
+      - depending on context like links etc
+    we can get pretty wild here?  is this turning into a PA? (personal assistant and a public address system)
+*** TODO commands
+    Show all/selected exercise images
+
+** sprint 2
+*** TODO patreon
+**** people can request/suggest built-in templates
+**** add extra ways for users to build templates
+
+
+** TODO telegram/whatsapp?
+
+* journey
+** setting up for production
+   https://testdriven.io/blog/dockerizing-flask-with-postgres-gunicorn-and-nginx/
+
