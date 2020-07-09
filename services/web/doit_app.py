@@ -6,7 +6,10 @@ async def index(request):
 
 
 async def post(request):
-    return web.Response(text="You called?!")
+    params = await request.post()
+    print("#############Params##################")
+    print(params)
+    return web.json_response(params["challenge"])
 
 
 doit = web.Application()
