@@ -16,6 +16,17 @@ services:
       - ./.env.prod
     depends_on:
       - db
+  cron:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./services/web/:/home/app/web/
+    command: python run_crontab.py
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
   db:
     image: postgres:12-alpine
     volumes:

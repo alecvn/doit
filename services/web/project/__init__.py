@@ -12,7 +12,7 @@ app.config.from_object("project.config.Config")
 db = SQLAlchemy(app)
 
 
-@app.route("/")
+@app.route("/slack")
 def event_hook(request):
     json_dict = json.loads(request.body.decode("utf-8"))
     # if json_dict["token"] != VERIFICATION_TOKEN:
@@ -24,15 +24,11 @@ def event_hook(request):
     return {"status": 500}
 
 
-from project.slack_interface import (
-    send_msg as slack_send_msg,
-    reaction_added,
-    handle_message,
-)
+from project import slack_interface
 from project.http import process_batch
 
-crontab(
-    "* * * * *",
-    func=lambda: process_batch([lambda: slack_send_msg("Testing my boundaries!")]),
-    start=True,
-)
+# crontab(
+#     "* * * * *",
+#     func=lambda: process_batch([lambda: slack_send_msg("Testing my boundaries!")]),
+#     start=True,
+# )

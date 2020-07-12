@@ -30,11 +30,19 @@ async def send_async(loop, batch):
 def process_batch(batch):
     start_time = time.time()
     loop = asyncio.get_event_loop()
+    asyncio.ensure_future(send_async(loop, batch))
+    logging.info(
+        f"Sending {len(batch)} requests takes {time.time() - start_time} seconds"
+    )
+
+
+def flask_process_batch(batch):
+    start_time = time.time()
+    loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(send_async(loop, batch))
     loop.run_until_complete(future)
     responses = future.result()
     logging.info(
-        "Sending %s requests takes %s seconds",
-        str(len(batch), time.time() - start_time),
+        f"Sending {len(batch)} requests takes {time.time() - start_time} seconds"
     )
     logging.info("{} requests were sent successfully".format(len(responses)))
