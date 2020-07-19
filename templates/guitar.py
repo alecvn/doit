@@ -1,11 +1,31 @@
-from rng import rng
+# from rng import rng as random
 
-from template import Exercise, Schedule
+# from template import Exercise, Schedule
+
+import collections
+import random
+import pytz
+import datetime
+
+
+timezone = pytz.timezone("Africa/Johannesburg")
+now = datetime.datetime.now(tz=timezone)
+
+today = now.date()
+random.seed(str(today))
+
+
+Schedule = collections.namedtuple(
+    "Schedule", ["min", "hour", "day", "month", "day_of_week"]
+)
+Exercise = collections.namedtuple("Exercise", ["name", "description", "media_url"])
+
 
 SCHEDULE = Schedule("0", "12-16/4", "*", "*", "*")
 # SCHEDULE = Schedule("*", "*", "*", "*", "*")
 
 notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
+note_duration = ["quarter", "third"]
 scales = [
     "Major (Ionian)",
     # "Dorian",
@@ -22,34 +42,29 @@ style = ["Pick", "Fingers"]
 warm_up = [
     Exercise(
         f"String crossings",
-        f"{rng.choice(style)} 60bpm-90bpm/15bpm",
-        "https://www.youtube.com/watch?v=NgY2S_zoPoc?t=2m26s",
+        f"{random.choice(style)} 60bpm-90bpm/15bpm",
+        "https://www.youtube.com/watch?v=NgY2S_zoPoc&t=2m26s",
     ),
     Exercise(
         f"Spider crawl",
-        f"{rng.choice(style)} 60bpm-90bpm/15bpm",
-        "https://www.youtube.com/watch?v=NgY2S_zoPoc?t=5m14s",
+        f"{random.choice(style)} 60bpm-90bpm/15bpm",
+        "https://www.youtube.com/watch?v=NgY2S_zoPoc&t=5m14s",
     ),
     Exercise(
         f"Chromatic scale",
-        f"{rng.choice(style)} 60bpm-90bpm/15bpm",
-        "https://www.youtube.com/watch?v=NgY2S_zoPoc?t=7m39s",
+        f"{random.choice(style)} 60bpm-90bpm/15bpm",
+        "https://www.youtube.com/watch?v=NgY2S_zoPoc&t=7m39s",
     ),
 ]
 guitar_left_hand = [
-    Exercise(
-        f"Tremolo - Staccato",
-        f"60bpm-90bpm/15bpm",
-        "https://www.youtube.com/watch?v=K0ODw9QhILQ&t=3m59s",
-    ),
     # Exercise(
-    #     f"{rng.choice(notes)} {rng.choice(scales)} - along neck",
-    #     f"{rng.choice(style)} down along neck, up along neck, skip to next string - 60bpm-90bpm/15bpm",
+    #     f"{random.choice(notes)} {random.choice(scales)} - along neck",
+    #     f"{random.choice(style)} down along neck, up along neck, skip to next string - 60bpm-90bpm/15bpm",
     #     "https://media.giphy.com/media/Kjj5yTgDdiuvC/giphy.gif",
     # ),
     # Exercise(
-    #     f"{rng.choice(notes)} {rng.choice(scales)} - cross neck",
-    #     f"{rng.choice(style)} down neck, up neck - 60bpm-90bpm/15bpm",
+    #     f"{random.choice(notes)} {random.choice(scales)} - cross neck",
+    #     f"{random.choice(style)} down neck, up neck - 60bpm-90bpm/15bpm",
     #     "https://media.giphy.com/media/23hPPMRgPxbNBlPQe3/giphy.gif",
     # ),
 ]
@@ -60,15 +75,15 @@ guitar_right_hand = [
     #     "https://media.giphy.com/media/Kjj5yTgDdiuvC/giphy.gif",
     # ),
     Exercise(
-        "Strumming quarter notes",
-        f"{rng.choice(notes)} {rng.choice(chord)} bare chord - 60bpm-90bpm/15bpm",
+        f"Strumming {random.choice(note_duration)} notes",
+        f"{random.choice(notes)} {random.choice(chord)} barre chord - 60bpm-90bpm/15bpm",
         "https://www.youtube.com/watch?v=WeJlUbFyes4&t=3m28s",
     ),
-    # Exercise(
-    #     "Strumming",
-    #     f"{rng.choice(notes)} {rng.choice(chord)} bare chord - 60bpm-90bpm/15bpm",
-    #     "https://www.youtube.com/watch?v=WeJlUbFyes4&t=3m28s",
-    # ),
+    Exercise(
+        f"Tremolo - Staccato",
+        f"60bpm-90bpm/15bpm",
+        "https://www.youtube.com/watch?v=K0ODw9QhILQ&t=3m59s",
+    ),
 ]
 EXERCISES = {
     "warm_up": warm_up,
@@ -77,5 +92,6 @@ EXERCISES = {
 }
 
 MSG = list(
-    zip(EXERCISES.keys(), map(lambda x: rng.choice(EXERCISES[x]), EXERCISES.keys()))
+    zip(EXERCISES.keys(), map(lambda x: random.choice(EXERCISES[x]), EXERCISES.keys()))
 )
+print(MSG)

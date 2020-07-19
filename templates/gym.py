@@ -2,8 +2,8 @@ from rng import rng
 
 from template import Exercise, Schedule
 
-SCHEDULE = Schedule("0", "9-17", "*", "*", "*")
-# SCHEDULE = Schedule("*", "*", "*", "*", "*")
+# SCHEDULE = Schedule("0", "9-17", "*", "*", "*")
+SCHEDULE = Schedule("*", "*", "*", "*", "*")
 EXERCISES = {
     "upper": [
         Exercise(

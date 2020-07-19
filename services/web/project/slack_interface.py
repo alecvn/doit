@@ -1,18 +1,19 @@
 import os
+import logging
 import pytz
 import datetime
-import logging
 from threading import Thread
 import requests
 
+
 from flask import Response
 from slack import WebClient
-from slack.errors import SlackApiError
 from slackeventsapi import SlackEventAdapter
+from slack.errors import SlackApiError
 
 from project import app, db
 from project.bot_commands import get_bot_response
-from project.models import get_or_create, User, Task
+from project.models import get_or_create, User, Task, Reaction
 
 
 logging.getLogger().setLevel(logging.INFO)
@@ -48,16 +49,19 @@ client = WebClient(token=SLACK_BOT_TOKEN)
 def reaction_added(event_data):
 
     emoji = event_data["event"]["reaction"]
+    item = event_data["event"]["item"]
     user, created = get_or_create(
         db.session,
         User,
         slack_address=f"<@{event_data['event']['user']}>",
         slack_id=event_data["event"]["user"],
     )
-    task = Task(name="test", user_id=user.id, completed=True)
-    db.session.add(task)
-    db.session.commit()
-    print(emoji)
+    tasks = Task.query.filter_by(ts=item["ts"])
+    if tasks.count() > 0:
+        for task in tasks:
+            reaction = Reaction(emoji=emoji, task_id=task.id, user_id=user.id)
+            db.session.add(reaction)
+        db.session.commit()
 
 
 # {
@@ -184,11 +188,20 @@ def get_main_block(group, name, description, media_url, show_media=False):
         }
 
 
+def get_title_block():
+    return {
+        "type": "section",
+        "text": {"type": "mrkdwn", "text": "*Drop and give me!*"},
+    }
+
+
 def get_blocks(objs, inspirational_image_url="", show_media=False, show_actions=False):
     blocks = []
 
     if inspirational_image_url != "":
         blocks.append(get_image_block(inspirational_image_url, "inspiration"))
+
+    blocks.append(get_title_block())
 
     for obj in objs:
         group, item = obj
@@ -212,9 +225,11 @@ def get_msg(msgs):
     timezone = pytz.timezone("Africa/Johannesburg")
     now = datetime.datetime.now(tz=timezone)
 
-    # start_hour = 9
+    start_hour = 9
+    # start_min = 31
     # end_hour = 17
     current_hour = now.hour
+    # current_minute = now.minute
     # attach_images = current_hour == start_hour
     inspirational_hours = []
     inspirational_image_url = (
@@ -222,31 +237,46 @@ def get_msg(msgs):
     )
 
     blocks = get_blocks(
-        msgs, inspirational_image_url=inspirational_image_url, show_media=True
+        msgs,
+        inspirational_image_url=inspirational_image_url,
+        show_media=current_hour == start_hour,
     )
 
-    # header = f"*<{inspirational_image_url}|Some text>*"
-
-    # msg_json = {
-    #     "channel": CHANNEL_NAME,
-    #     "username": USERNAME,
-    #     "icon_emoji": "aw_yeah",
-    #     "blocks": blocks,
-    # }
-    # print(msg_json)
-
-    # return requests.post(WEBHOOK_URL, json=msg_json)
     return blocks
 
 
-async def send_msg(msg, send_as_blocks=False):
+async def send_msg(session, options, send_as_blocks=False):
+    channel = "#workout"
+
+    import random
+    import pytz
+    import datetime
+
+    timezone = pytz.timezone("Africa/Johannesburg")
+    now = datetime.datetime.now(tz=timezone)
+
+    today = now.date()
+    random.seed(str(today))
+
+    msg = list(
+        zip(options.keys(), map(lambda x: random.choice(options[x]), options.keys()))
+    )
+
     try:
         if send_as_blocks:
             blocks_from_message = get_msg(msg)
-            client.chat_postMessage(channel="#test", blocks=blocks_from_message)
-            client.chat_postMessage(channel="#workout", blocks=blocks_from_message)
+            response = client.chat_postMessage(
+                channel=channel, blocks=blocks_from_message
+            )
+            for item in msg:
+                task = Task()
+                task.channel = response["channel"]
+                task.ts = response["ts"]
+                task.name = item[1].name
+                task.description = item[1].description
+                session.add(task)
+            session.commit()
         else:
-            client.chat_postMessage(channel="#test", text=msg)
-            client.chat_postMessage(channel="#workout", text=msg)
+            client.chat_postMessage(channel=channel, text=msg)
     except SlackApiError as e:
         logging.warning(e)

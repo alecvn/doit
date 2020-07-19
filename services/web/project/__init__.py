@@ -25,10 +25,3 @@ def event_hook(request):
 
 
 from project import slack_interface
-from project.http import process_batch
-
-# crontab(
-#     "* * * * *",
-#     func=lambda: process_batch([lambda: slack_send_msg("Testing my boundaries!")]),
-#     start=True,
-# )

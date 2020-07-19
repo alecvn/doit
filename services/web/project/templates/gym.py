@@ -1,15 +1,4 @@
 import collections
-import random
-import pytz
-import datetime
-
-
-timezone = pytz.timezone("Africa/Johannesburg")
-now = datetime.datetime.now(tz=timezone)
-
-today = now.date()
-random.seed(str(today))
-
 
 Schedule = collections.namedtuple(
     "Schedule", ["min", "hour", "day", "month", "day_of_week"]
@@ -130,7 +119,3 @@ EXERCISES = {
         ),
     ],
 }
-
-MSG = list(
-    zip(EXERCISES.keys(), map(lambda x: random.choice(EXERCISES[x]), EXERCISES.keys()))
-)

@@ -19,30 +19,35 @@ class User(TimestampMixin, db.Model):
     slack_id = db.Column(db.String(128), unique=True, nullable=False)
     task_completed_emoji = db.Column(db.String(128))
     reactions = db.relationship("Reaction", back_populates="user")
-    tasks = db.relationship("Task", back_populates="user")
 
     def __init__(self, slack_address, slack_id):
         self.slack_address = slack_address
         self.slack_id = slack_id
 
 
-class Reaction(TimestampMixin, db.Model):
-    __tablename__ = "reactions"
-
-    id = db.Column(db.Integer, primary_key=True)
-    emoji = db.Column(db.String(128), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    user = db.relationship("User", back_populates="reactions")
-
-
 class Task(TimestampMixin, db.Model):
     __tablename__ = "tasks"
 
     id = db.Column(db.Integer, primary_key=True)
+    ts = db.Column(db.String(128), nullable=False)
+    channel = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    completed = db.Column(db.Boolean)
+    description = db.Column(db.String(128), nullable=False)
+    reactions = db.relationship("Reaction", back_populates="task")
+    # completed = db.Column(db.Boolean)
+    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    # user = db.relationship("User", back_populates="tasks")
+
+
+class Reaction(TimestampMixin, db.Model):
+    __tablename__ = "reactions"
+
+    id = db.Column(db.Integer, primary_key=True)
+    emoji = db.Column(db.String(128))
+    task_id = db.Column(db.Integer, db.ForeignKey("tasks.id"), nullable=False)
+    task = db.relationship("Task", back_populates="reactions")
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    user = db.relationship("User", back_populates="tasks")
+    user = db.relationship("User", back_populates="reactions")
 
 
 def get_or_create(session, model, defaults=None, **kwargs):
