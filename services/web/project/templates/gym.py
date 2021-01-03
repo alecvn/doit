@@ -103,9 +103,9 @@ EXERCISES = {
             "https://media.giphy.com/media/3o6gDUTsbepOYTqTRK/giphy.gif",
         ),
         Exercise(
-            "Supermans",
-            "20 reps",
-            "https://media.giphy.com/media/PmPRDFY1ENYMo/giphy.gif",
+            "Bufferfly Situps",
+            "10 reps",
+            "https://i.makeagif.com/media/8-23-2016/W_ZqTQ.gif",
         ),
         Exercise(
             "Leg Raises",
