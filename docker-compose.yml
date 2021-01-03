@@ -20,6 +20,17 @@ services:
       - POSTGRES_USER=doit
       - POSTGRES_PASSWORD=doit
       - POSTGRES_DB=doit_dev
+  cron:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./services/web/:/home/app/web/
+    command: python crontab.py
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
 
 volumes:
   postgres_data:

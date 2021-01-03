@@ -18,6 +18,8 @@
     we can get pretty wild here?  is this turning into a PA? (personal assistant and a public address system)
 *** TODO commands
     Show all/selected exercise images
+*** TODO flask migrate
+    https://blog.miguelgrinberg.com/post/how-to-add-flask-migrate-to-an-existing-project
 
 ** sprint 2
 *** TODO patreon

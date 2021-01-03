@@ -48,6 +48,9 @@ class Reaction(TimestampMixin, db.Model):
     task = db.relationship("Task", back_populates="reactions")
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("User", back_populates="reactions")
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "task_id", name="_task_user_index"),
+    )
 
 
 def get_or_create(session, model, defaults=None, **kwargs):

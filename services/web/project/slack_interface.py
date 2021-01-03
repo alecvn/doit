@@ -1,20 +1,18 @@
-import os
-import logging
-import pytz
 import datetime
+import logging
+import os
 from threading import Thread
+
+import pytz
 import requests
 
-
 from flask import Response
-from slack import WebClient
-from slackeventsapi import SlackEventAdapter
-from slack.errors import SlackApiError
-
 from project import app, db
 from project.bot_commands import get_bot_response
-from project.models import get_or_create, User, Task, Reaction
-
+from project.models import Reaction, Task, User, get_or_create
+from slack import WebClient
+from slack.errors import SlackApiError
+from slackeventsapi import SlackEventAdapter
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -246,7 +244,7 @@ def get_msg(msgs):
 
 
 async def send_msg(session, options, send_as_blocks=False):
-    channel = "#workout"
+    channel = "#test"  # "#workout"
 
     import random
     import pytz

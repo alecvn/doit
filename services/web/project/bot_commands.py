@@ -27,10 +27,14 @@ def get_bot_response(context, external_url=""):
         )
         responses.append("\nThen again, he _was_ pretty senile...")
     elif any(item in command.lower() for item in report):
-        first_reaction = Reaction.query.filter_by(user_id=user.id).first()
+        first_reaction = Reaction.query.filter_by(
+            user_id=user.id, emoji=user.task_completed_emoji
+        ).first()
         if first_reaction:
             reactions = (
-                Reaction.query.filter_by(user_id=user.id)
+                Reaction.query.filter_by(
+                    user_id=user.id, emoji=user.task_completed_emoji
+                )
                 .join(Task, Task.id == Reaction.task_id)
                 .with_entities(func.count(Task.name), Task.name, Task.description)
                 .group_by(Task.name, Task.description)
@@ -38,11 +42,11 @@ def get_bot_response(context, external_url=""):
             )
             base_str = f"<@{username}> here's a breakdown of your recorded activities since {first_reaction.created_at.strftime('%d %b %Y')} \n"
             reactions_str = ""
-        for reaction in reactions:
-            sets = reaction[0]
-            activity = reaction[1]
-            quantity, quantum = reaction[2].split(" ")
-            reactions_str += f"> *{activity}* - _{sets}_ _sets_ of _{quantity}_ _{quantum}_ for a total of *{int(sets)*int(quantity)} {quantum}*\n"
+            for reaction in reactions:
+                sets = reaction[0]
+                activity = reaction[1]
+                quantity, quantum = reaction[2].split(" ")
+                reactions_str += f"> *{activity}* - _{sets}_ _sets_ of _{quantity}_ _{quantum}_ for a total of *{int(sets)*int(quantity)} {quantum}*\n"
             responses.append(base_str + reactions_str)
         else:
             responses.append(
