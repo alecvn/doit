@@ -6,8 +6,8 @@ Schedule = collections.namedtuple(
 Exercise = collections.namedtuple("Exercise", ["name", "description", "media_url"])
 
 
-SCHEDULE = Schedule("0", "9-17", "1-5", "*", "*")
-# SCHEDULE = Schedule("*", "*", "*", "*", "*")
+# SCHEDULE = Schedule("0", "9-17", "1-5", "*", "*")
+SCHEDULE = Schedule("*", "*", "*", "*", "*")
 EXERCISES = {
     "upper": [
         Exercise(
@@ -103,7 +103,7 @@ EXERCISES = {
             "https://media.giphy.com/media/3o6gDUTsbepOYTqTRK/giphy.gif",
         ),
         Exercise(
-            "Bufferfly Situps",
+            "Butterfly Situps",
             "10 reps",
             "https://i.makeagif.com/media/8-23-2016/W_ZqTQ.gif",
         ),

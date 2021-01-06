@@ -244,7 +244,7 @@ def get_msg(msgs):
 
 
 async def send_msg(session, options, send_as_blocks=False):
-    channel = "#workout"
+    channel = "#test"
 
     import random
     import pytz
