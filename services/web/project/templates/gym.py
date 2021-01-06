@@ -6,8 +6,8 @@ Schedule = collections.namedtuple(
 Exercise = collections.namedtuple("Exercise", ["name", "description", "media_url"])
 
 
-# SCHEDULE = Schedule("0", "9-17", "1-5", "*", "*")
-SCHEDULE = Schedule("*", "*", "*", "*", "*")
+SCHEDULE = Schedule("0", "9-17", "*", "*", "1-5")
+# SCHEDULE = Schedule("*", "*", "*", "*", "*")
 EXERCISES = {
     "upper": [
         Exercise(
