@@ -13,6 +13,7 @@ from project.models import Reaction, Task, User, get_or_create
 from slack import WebClient
 from slack.errors import SlackApiError
 from slackeventsapi import SlackEventAdapter
+from sqlalchemy import func
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -186,6 +187,10 @@ def get_main_block(group, name, description, media_url, show_media=False):
         }
 
 
+def get_generic_main_block(text):
+    return {"type": "section", "text": {"type": "mrkdwn", "text": text}}
+
+
 def get_title_block():
     return {
         "type": "section",
@@ -248,7 +253,6 @@ async def send_msg(session, options, send_as_blocks=False):
 
     import random
     import pytz
-    import datetime
 
     timezone = pytz.timezone("Africa/Johannesburg")
     now = datetime.datetime.now(tz=timezone)
@@ -276,5 +280,58 @@ async def send_msg(session, options, send_as_blocks=False):
             session.commit()
         else:
             client.chat_postMessage(channel=channel, text=msg)
+    except SlackApiError as e:
+        logging.warning(e)
+
+
+async def send_weekly_update(session, send_as_blocks=False):
+    channel = "#workout"
+
+    import random
+    import pytz
+
+    timezone = pytz.timezone("Africa/Johannesburg")
+    now = datetime.datetime.now(tz=timezone)
+
+    today = now.date()
+    random.seed(str(today))
+
+    try:
+        if send_as_blocks:
+            blocks = []
+            ########################################################################
+            users = User.query.all()
+            for user in users:
+
+                today = datetime.date.today()
+                monday = today - datetime.timedelta(days=today.weekday())
+
+                reactions = (
+                    Reaction.query.filter_by(
+                        user_id=user.id, emoji=user.task_completed_emoji
+                    )
+                    .filter(Reaction.created_at >= monday)
+                    .join(Task, Task.id == Reaction.task_id)
+                    .with_entities(func.count(Task.name), Task.name, Task.description)
+                    .group_by(Task.name, Task.description)
+                    .all()
+                )
+
+                base_str = f"{user.slack_address} here's a summary of your week! \n"
+                blocks.append(get_generic_main_block(base_str))
+                reactions_str = ""
+                for reaction in reactions:
+                    sets = reaction[0]
+                    activity = reaction[1]
+                    quantity, quantum = reaction[2].split(" ")
+                    reactions_str += f"> *{activity}* - _{sets}_ _sets_ of _{quantity}_ _{quantum}_ for a total of *{int(sets)*int(quantity)} {quantum}*\n"
+                blocks.append(get_generic_main_block(reactions_str))
+
+            ########################################################################
+
+            client.chat_postMessage(channel=channel, blocks=blocks)
+
+        else:
+            client.chat_postMessage(channel=channel, text="BLANK")
     except SlackApiError as e:
         logging.warning(e)

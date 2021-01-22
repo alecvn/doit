@@ -27,7 +27,11 @@
 **** add extra ways for users to build templates
 
 ** backlog
-   telegram/whatsapp/teams
+*** implement guitar practice again
+*** discord integration
+*** weekly reports
+*** telegram/whatsapp/teams integrations
+
 
 * journey
 ** naming
@@ -179,3 +183,7 @@
     ],
 *** core
     https://www.youtube.com/watch?v=3p8EBPVZ2Iw
+* prod
+  http://dev.impd.co.za:1337/slack
+* test
+
